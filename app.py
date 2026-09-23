@@ -85,10 +85,15 @@ def perfil():
         return redirect(url_for("login"))
 
 # Cerrar sesion
+
 @app.route("/logout")
 def logout():
-    session.pop("usuario", None)  # Eliminar sesión
-    return redirect(url_for("home"))
+    session.pop("usuario", None) # Eliminar sesión
+    resp = make_response(redirect(url_for("home"))) # Eliminar la cookie 
+    resp.delete_cookie("usuario_cookie")
+
+    return resp
+
 
 # Iniciar la aplicación
 if __name__ == "__main__":
