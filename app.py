@@ -1,8 +1,32 @@
-from flask import Flask, render_template, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session, request, make_response
 
 # Crea la aplicación Flask
 app = Flask(__name__)
 app.secret_key = "unaclav3"
+
+
+@app.route("/set_cookie")
+def set_cookie():
+    resp = make_response("Cookie creada correctamente")
+    resp.set_cookie("usuario_cookie", "juan")  # Guardamos el valor en el navegador
+    return resp
+
+#lee la cookie
+@app.route("/get_cookie")
+def get_cookie():
+    usuario = request.cookies.get("usuario_cookie")
+    if usuario:
+        return f"La cookie dice que el usuario es: {usuario}"
+    else:
+        return "No existe la cookie."
+
+#elimina
+@app.route("/delete_cookie")
+def delete_cookie():
+    resp = make_response("Cookie eliminada")
+    resp.delete_cookie("usuario_cookie")
+    return resp
+
 
 # Usuarios simuados
 usuarios = {
@@ -40,13 +64,16 @@ curso = [
     {"nombre": "Inteligencia Artificial", "docente": "Carlos Rojas", "cupos": 0}
 ]
 
+
 @app.route("/cursos")
 def cursos():
     if "usuario" in session:
-        return render_template("cursos.html", cursos=curso, usuario=session["usuario"])
+        usuario = session["usuario"]
+        resp = make_response(render_template("cursos.html", cursos=curso, usuario=usuario))
+        resp.set_cookie("usuario_cookie", usuario)  # Guardamos el usuario en cookie
+        return resp
     else:
         return redirect(url_for("login"))
-
 
 
 # Perfil protegido
