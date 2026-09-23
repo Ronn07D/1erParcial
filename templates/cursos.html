@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Cursos{% endblock %}
+
+{% block content %}
+<h1>Lista de Cursos</h1>
+<p>Bienvenido {{ usuario }}</p>
+
+<ul>
+    {% for curso in cursos %}
+        <li>
+            <strong>{{ curso.nombre }}</strong> - Docente: {{ curso.docente }}
+            {% if curso.cupos > 0 %}
+                <span style="color:green;">Curso disponible ({{ curso.cupos }} cupos)</span>
+            {% else %}
+                <span style="color:red;">Curso lleno</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

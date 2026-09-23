@@ -33,12 +33,21 @@ def login():
     return render_template("login.html")
 
 # pagina de cursos 
+
+curso = [
+    {"nombre": "Programación Web", "docente": "Luis Pérez", "cupos": 15},
+    {"nombre": "Bases de Datos", "docente": "Ana López", "cupos": 8},
+    {"nombre": "Inteligencia Artificial", "docente": "Carlos Rojas", "cupos": 0}
+]
+
 @app.route("/cursos")
 def cursos():
     if "usuario" in session:
-        return f"Bienvenido {session['usuario']} a la lista de cursos."
+        return render_template("cursos.html", cursos=curso, usuario=session["usuario"])
     else:
         return redirect(url_for("login"))
+
+
 
 # Perfil protegido
 @app.route("/perfil")
